@@ -46,11 +46,23 @@ public class DocumentInverterTest {
         assertEquals("<d><b/><c><a/></c></d>", invertedDocumentString);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void xmlWithMultipleLeafNodesAreInvalid() throws FileNotFoundException {
+    @Test
+    public void canRevertByStrippingTextNodes() throws FileNotFoundException {
         // Given
-        File xmlFile = ResourceUtils.getFile("classpath:invalid.xml");
+        File xmlFile = ResourceUtils.getFile("classpath:test2.xml");
         // When
         final Document document = inverter.invert(xmlFile);
+        final String invertedDocumentString = inverter.xmlString(document);
+        assertEquals("<d><b/><c><a/></c></d>", invertedDocumentString);
+    }
+
+    @Test
+    public void xmlWithMultipleLeafNodesAreInvalid() throws FileNotFoundException {
+        // Given
+        File xmlFile = ResourceUtils.getFile("classpath:strip_text.xml");
+        // When
+        final Document document = inverter.invert(xmlFile);
+        final String invertedDocumentString = inverter.xmlString(document);
+        assertEquals("<b><a/></b>", invertedDocumentString);
     }
 }
